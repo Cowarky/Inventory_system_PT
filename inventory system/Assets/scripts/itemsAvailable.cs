@@ -9,13 +9,8 @@ public class itemsAvailable : MonoBehaviour
     [SerializeField] private GameObject inventoryGameObject;
     [SerializeField] private inventory _inventory;
 
-    void Start(){
-        
-    }
+    public static item selectedItem = null;
 
-    void GetAllItems(){
-        
-    }
     public void CheckItemLocation(string name){
         
         foreach(item itm in items){
@@ -71,6 +66,15 @@ public class itemsAvailable : MonoBehaviour
         foreach (Transform child in children){
             if (child.name == name){
                 Destroy(child.gameObject);
+            }
+        }
+    }
+    public void SelectItem(string name){
+        if (_inventory.CheckIfExists(_inventory.GetItem(name))){
+            foreach (item itm in _inventory.itemsInInventory){
+                if (itm.name == name){
+                    selectedItem = itm;
+                }
             }
         }
     }

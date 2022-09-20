@@ -14,7 +14,11 @@ public class selectItem : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick (PointerEventData eventData)
     {
-        items.CheckItemLocation(name);
+        if (eventData.button == PointerEventData.InputButton.Right){
+            items.SelectItem(name);
+        }else if (eventData.button == PointerEventData.InputButton.Left){
+            items.CheckItemLocation(name);
+        }
     }
     
 }
