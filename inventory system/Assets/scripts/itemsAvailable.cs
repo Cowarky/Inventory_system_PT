@@ -5,10 +5,9 @@ using UnityEngine;
 public class itemsAvailable : MonoBehaviour
 {
     [SerializeField] private List<item> items;
-    [SerializeField] private GameObject parent;
-    [SerializeField] private GameObject panel;
+    [SerializeField] private GameObject ItemsGameObject;
+    [SerializeField] private GameObject inventoryGameObject;
     [SerializeField] private inventory _inventory;
-    public status state = status.equipped;
 
     void Start(){
         
@@ -18,34 +17,60 @@ public class itemsAvailable : MonoBehaviour
         
     }
     public void CheckItemLocation(string name){
+        
         foreach(item itm in items){
-            if (name == itm.name){
-                if (state == itm.equipped){
-                    RemoveItem(name);
-                    itm.equipped = status.None;
+            if (!_inventory.CheckIfExists(itm)){
+            
+                if (name == itm.name){
+                    if (_inventory.AddItemToInventory(itm)){
+                        AddItem(name);
+                        itm.equipped = !itm.equipped;
+                    }
                 }
-                else {
-                    AddItem(name);
-                    itm.equipped = status.equipped;
+
+            }
+            else {
+                if (name == itm.name){
+                    if (!itm.equipped){
+                        if (itm.isStackable){
+                            _inventory.AddItemToInventory(itm);
+                            // itm.equipped = !itm.equipped;
+                            DeleteItem(itm.name);
+                        }
+                    }
+                    else {
+                        _inventory.RemoveItemFromInventory(itm);
+                        RemoveItem(itm.name);
+                        itm.equipped = !itm.equipped;
+                    }
                 }
             }
         }
+
     }
     void AddItem(string name){
-        Transform[] children = parent.GetComponentsInChildren<Transform>();
+        Transform[] children = ItemsGameObject.GetComponentsInChildren<Transform>();
         foreach (Transform child in children){
             if (child.name == name){
-                child.SetParent(panel.transform);
+                child.SetParent(inventoryGameObject.transform);
                 child.SetSiblingIndex(0);
             }
         }
     }
     void RemoveItem(string name){
-        Transform[] children = panel.GetComponentsInChildren<Transform>();
+        Transform[] children = inventoryGameObject.GetComponentsInChildren<Transform>();
         foreach (Transform child in children){
             if (child.name == name){
-                child.SetParent(parent.transform);
+                child.SetParent(ItemsGameObject.transform);
                 child.SetSiblingIndex(0);
+            }
+        }
+    }
+    void DeleteItem(string name){
+        Transform[] children = inventoryGameObject.GetComponentsInChildren<Transform>();
+        foreach (Transform child in children){
+            if (child.name == name){
+                Destroy(child.gameObject);
             }
         }
     }
