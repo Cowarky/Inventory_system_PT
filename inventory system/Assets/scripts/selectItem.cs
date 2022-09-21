@@ -16,6 +16,7 @@ public class selectItem : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Right){
             items.SelectItem(name);
+            Debug.Log(gameObject.GetComponent<Transform>());
         }else if (eventData.button == PointerEventData.InputButton.Left){
             items.CheckItemLocation(name);
         }

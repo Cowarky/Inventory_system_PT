@@ -14,34 +14,41 @@ public class itemsAvailable : MonoBehaviour
     public void CheckItemLocation(string name){
         
         foreach(item itm in items){
-            if (!_inventory.CheckIfExists(itm)){
-            
-                if (name == itm.name){
+            if (name == itm.name) {
+
+                if (!_inventory.CheckIfExists(itm)){
+
                     if (_inventory.AddItemToInventory(itm)){
                         AddItem(name);
-                        itm.equipped = !itm.equipped;
                     }
-                }
 
-            }
-            else {
-                if (name == itm.name){
-                    if (!itm.equipped){
+                }else {
+                    if (!itm.equipped) {
+
                         if (itm.isStackable){
                             _inventory.AddItemToInventory(itm);
-                            // itm.equipped = !itm.equipped;
-                            DeleteItem(itm.name);
+                            DeleteItem(name);
+                        }else {
+                            _inventory.RemoveItemFromInventory(itm);
+                            RemoveItem(name);
                         }
-                    }
-                    else {
-                        _inventory.RemoveItemFromInventory(itm);
-                        RemoveItem(itm.name);
-                        itm.equipped = !itm.equipped;
+
                     }
                 }
+                itm.equipped = !itm.equipped;
+
             }
         }
 
+    }
+    public void ChangeItemLocation (item itm, GameObject from, GameObject to, int idx){
+        Transform[] children = from.GetComponentsInChildren<Transform>();
+        foreach (Transform child in children){
+            if (child.name == itm.name){
+                child.SetParent(to.transform);
+                child.SetSiblingIndex(idx);
+            }
+        }
     }
     void AddItem(string name){
         Transform[] children = ItemsGameObject.GetComponentsInChildren<Transform>();
@@ -77,5 +84,23 @@ public class itemsAvailable : MonoBehaviour
                 }
             }
         }
+    }
+    public bool CheckItemExists(string name){
+        foreach (item itm in items){
+            if (itm.name == name){
+                return true;
+            }
+        }
+        return false;
+    }
+    public item GetItem(string name){
+        foreach (item itm in items){
+            if (itm.name == name)
+                return itm;
+        }
+        return null;
+    }
+    public GameObject GetInventoryGameObject(){
+        return inventoryGameObject;
     }
 }

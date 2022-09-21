@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b7ccf4369c5b1f44aed953601c84f2a, type: 3}
-  m_Name: bullets
+  m_Name: glock loaded
   m_EditorClassIdentifier: 
   image: {fileID: 0}
   description: 
   isStackable: 0
-  amount: 2
-  equipped: 1
+  amount: 0
+  equipped: 0

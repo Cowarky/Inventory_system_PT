@@ -10,13 +10,11 @@ public class inventory : MonoBehaviour
 
 
     void Awake(){
-        
+
     }
 
     public bool AddItemToInventory(item itm){
         if (CheckIfExists(itm) && itm.isStackable){
-            // GetItem(itm.name).amount++;
-            AddAmount(itm, 1);
             return true;
         }else if (!CheckIfExists(itm) && !CheckIfFull()){
             itemsInInventory.Add(itm);
@@ -33,7 +31,14 @@ public class inventory : MonoBehaviour
         return false;
     }
     public void AddAmount(item itm, int amount){
-        GetItem(itm.name).amount += amount;
+        if (CheckIfExists(itm) && itm.isStackable){
+            foreach (item _item in itemsInInventory){
+                if (_item.name == itm.name){
+                    _item.amount += amount;
+                }
+            }
+        }
+        // GetItem(itm.name).amount += amount;
     }
     public bool CheckIfExists(item itm){
         if (itemsInInventory.Contains(itm)){
